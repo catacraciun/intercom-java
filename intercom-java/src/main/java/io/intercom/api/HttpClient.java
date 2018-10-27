@@ -90,6 +90,11 @@ class HttpClient {
         return executeHttpMethod("DELETE", null, getJavaType(reqres));
     }
 
+    public <T, E> T delete(Class<T> reqres, E entity) {
+        headers.put("Content-Type", APPLICATION_JSON);
+        return executeHttpMethod("DELETE", entity, getJavaType(reqres));
+    }
+
     public <T, E> T put(Class<T> reqres, E entity) {
         headers.put("Content-Type", APPLICATION_JSON);
         return executeHttpMethod("PUT", (E) entity, getJavaType(reqres));
@@ -178,7 +183,7 @@ class HttpClient {
     }
 
     private boolean shouldSkipResponseEntity(JavaType javaType, HttpURLConnection conn, int responseCode) {
-        return responseCode == 204 || Void.class.equals(javaType.getRawClass()) || "DELETE".equals(conn.getRequestMethod());
+        return responseCode == 204 || Void.class.equals(javaType.getRawClass());
     }
 
     private <T> T readEntity(HttpURLConnection conn, int responseCode, JavaType javaType) throws IOException {
